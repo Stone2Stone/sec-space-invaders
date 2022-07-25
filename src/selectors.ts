@@ -1,1 +1,1 @@
-export const canvas = document!.querySelector("canvas") as HTMLCanvasElement;
+export const canvas = document.querySelector("canvas") as HTMLCanvasElement;
