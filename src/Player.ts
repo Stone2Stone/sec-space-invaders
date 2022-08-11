@@ -1,13 +1,16 @@
-export class Player {
+import spaceShip from '../img/spaceship.png';
+
+class Player {
   posititon!: { x: number; y: number };
   velocity: { x: number; y: number };
   rotation: number;
+  opacity: number;
   width!: number;
   height!: number;
   image!: HTMLImageElement;
   canvasContext: CanvasRenderingContext2D;
 
-  constructor(canvas: HTMLCanvasElement, playerImage: string) {
+  constructor(canvas: HTMLCanvasElement) {
     //set player initial velocity
     this.velocity = {
       x: 0,
@@ -17,11 +20,14 @@ export class Player {
     //set player initial rotation
     this.rotation = 0;
 
+    //set player initial opacity
+    this.opacity = 1;
+
     //set player initial image
     const image = new Image();
-    image.src = playerImage;
+    image.src = spaceShip;
     image.onload = () => {
-      const SCALE: number = 0.15;
+      const SCALE: number = 0.3;
       this.image = image;
       //set player initial size
       this.width = image.width * SCALE;
@@ -39,6 +45,8 @@ export class Player {
 
   //drawing out player
   draw(): void {
+    this.canvasContext.save();
+    this.canvasContext.globalAlpha = this.opacity;
     this.canvasContext.drawImage(
       this.image,
       this.posititon.x,
@@ -46,6 +54,7 @@ export class Player {
       this.width,
       this.height
     );
+    this.canvasContext.restore();
   }
 
   update(): void {

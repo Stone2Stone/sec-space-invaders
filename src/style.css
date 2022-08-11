@@ -1,6 +1,29 @@
+@font-face {
+  font-family: "Pixeloid Sans";
+  src: url("/fonts/PixeloidSans.woff") format("woff"),
+    url("/fonts/PixeloidSans.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Pixeloid Sans Bold";
+  src: url("/fonts/PixeloidSans-Bold.woff") format("woff"),
+    url("/fonts/PixeloidSans-Bold.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Pixeloid Mono";
+  src: url("/fonts/PixeloidMono.woff") format("woff"),
+    url("/fonts/PixeloidMono.woff2") format("woff2");
+}
+
 html,
 body {
   margin: 0;
+  font-family: "Pixeloid Sans";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: blueviolet;
 }
 
 html::-webkit-scrollbar {
@@ -9,4 +32,53 @@ html::-webkit-scrollbar {
 
 body::-webkit-scrollbar {
   display: none;
+}
+
+.hide {
+  display: none !important;
+}
+
+#lives {
+  position: absolute;
+  z-index: 10;
+  color: white;
+  right: 10px;
+  top: 10px;
+  margin: 0;
+  font-size: 14px;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+#secLogo {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+
+#text {
+  font-family: Pixeloid Sans Bold;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  color: white;
+  left: 10px;
+  bottom: 10px;
+  margin: 0;
+  font-size: 16px;
+}
+
+.textEl {
+  color: #109bd8;
+}
+
+#gameOver {
+  position: absolute;
+  top: 30%;
+  left: 30%;
+  color: white;
+  font-size: 64px;
+  z-index: 100;
 }
