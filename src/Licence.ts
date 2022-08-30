@@ -51,8 +51,8 @@ abstract class Licence {
   update({ velocity }: IVelocity): void {
     if (this.image) {
       this.draw();
-      // this.posititon.x += velocity.x;
-      // this.posititon.y += velocity.y;
+      this.posititon.x += velocity.x;
+      this.posititon.y += velocity.y;
     }
   }
 

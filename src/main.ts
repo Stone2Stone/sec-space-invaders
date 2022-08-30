@@ -160,6 +160,14 @@ function animateGame() {
     grid.invaders.forEach((invader, i) => {
       invader.update({ velocity: grid.velocity });
 
+      if (
+        invader.posititon.y + invader.height >= player.posititon.y &&
+        invader.posititon.x + invader.width >= player.posititon.x &&
+        invader.posititon.x <= player.posititon.x + player.width
+      ) {
+        game.over = false;
+        return requestAnimationFrame(animateLose);
+      }
       playerProjectiles.forEach((playerProjectile, j) => {
         if (
           playerProjectile.position.y - playerProjectile.radius <=
@@ -207,25 +215,24 @@ function animateGame() {
                 playerProjectiles.splice(0, playerProjectiles.length);
                 invaderProjectiles.splice(0, invaderProjectiles.length);
                 particles.splice(0, particles.length);
-                // setTimeout(() => {
-                level = level + 1;
-                console.log(level);
-                levelEl.innerHTML = `${level}`;
-                switch (level) {
-                  case 2:
-                    grids.push(new Grid("bad", 10, 10));
-                    return;
-                  case 3:
-                    grids.push(new Grid("bad", 2, 2));
-                    return;
-                  case 4:
-                    grids.push(new Grid("bad", 3, 3));
-                    return;
-                  default:
-                    animateWin();
-                    return;
-                }
-                // }, 1000);
+                setTimeout(() => {
+                  level = level + 1;
+                  levelEl.innerHTML = `${level}`;
+                  switch (level) {
+                    case 2:
+                      grids.push(new Grid("bad", 5, 5));
+                      return;
+                    case 3:
+                      grids.push(new Grid("bad", 6, 6));
+                      return;
+                    case 4:
+                      grids.push(new Grid("bad", 7, 7));
+                      return;
+                    default:
+                      animateWin();
+                      return;
+                  }
+                }, 1000);
               }
             }
           }, 0);
@@ -236,7 +243,7 @@ function animateGame() {
 
   //spawn new enemies
   if (frames === 0) {
-    grids.push(new Grid("good", 1, 1));
+    grids.push(new Grid("good", 5, 5));
   }
 
   frames++;
@@ -257,6 +264,7 @@ function animateGame() {
 
 if (!game.over) {
   animateGame();
+  console.log(grids);
 } else {
   animateLose();
 }
