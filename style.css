@@ -1,19 +1,19 @@
 @font-face {
   font-family: "Pixeloid Sans";
-  src: url("/fonts/PixeloidSans.woff") format("woff"),
-    url("/fonts/PixeloidSans.woff2") format("woff2");
+  src: url("./fonts/PixeloidSans.woff") format("woff"),
+    url("./fonts/PixeloidSans.woff2") format("woff2");
 }
 
 @font-face {
   font-family: "Pixeloid Sans Bold";
-  src: url("/fonts/PixeloidSans-Bold.woff") format("woff"),
-    url("/fonts/PixeloidSans-Bold.woff2") format("woff2");
+  src: url("./fonts/PixeloidSans-Bold.woff") format("woff"),
+    url("./fonts/PixeloidSans-Bold.woff2") format("woff2");
 }
 
 @font-face {
   font-family: "Pixeloid Mono";
-  src: url("/fonts/PixeloidMono.woff") format("woff"),
-    url("/fonts/PixeloidMono.woff2") format("woff2");
+  src: url("./fonts/PixeloidMono.woff") format("woff"),
+    url("./fonts/PixeloidMono.woff2") format("woff2");
 }
 
 html,
