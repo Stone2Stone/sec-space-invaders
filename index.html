@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/sec-space-invaders/assets/vite.4a748afd.svg" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SEC Space Invaders</title>
+    <script async type="module" crossorigin src="/sec-space-invaders/assets/index.7cecf457.js"></script>
+    <link rel="stylesheet" href="/sec-space-invaders/assets/index.e6b17bb9.css">
+  </head>
+  <body>
+    <div style="position: relative">
+      <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALUAAABDCAYAAADamEStAAAACXBIWXMAAAsSAAALEgHS3X78AAAEIElEQVR4nO2d33EaMRDG5Ywf8hY68HUQOvC5hFQQSnAqMFQQSsCVAB2QDpz3PJAKyNxYmlHO4g7d7Wql1febYezB2JLOH8v+k+7ucrkYIM7CGLO0k3izDzCRT7hwWdAJem8fq9ovxlwgaqCOe/xLRdlaK/3ZGLOxEzlUei3IgE8tSyfgRzuDu1ovAjWw1DK0dtRFbQtPASy1DKGLDktNBAJFoA64H+lYBdJ1v40xO82LlgCiTkfjBYWOrsiyVr7u5EDU/LigsNG8yJyAqPnZa19gbiBQBOqApeYhFBT6vKJxiQ+ImodQUOizQzmcD4iaFgSFGQBR04KgMAMg6nT8Ncac7GjnGhYsBUQ9nb5PPNacdPLcE8AIRD2doUAQCII8dRyNtbbUFndtO/c4H7FzpphLzJgt1Ziw1HF0ueeXkiZcIxC1LG47l3QKcCmwYaE/5nLgtVFA1LfhgkJq8S0z8c23AvNgGxOivg0EhQUBUX+EOgj8YdN5fm76lj10mwS91hLzuGXMpzltBBD1R6irgif0eaQFos6PV9vwJN3B5zoJU74h3dkns9YOUb8z1iqaktRCuoZEJyGJmwNRvzPWKhqLv6EWPdOJqVHUTSA1R52qw4ZaQWoUde1VQQlXa0tZXBkD7kd+rAjTiqG/M+Rq/TLGPNvvT1deM4WhIpM/Jgk1iZqrKjgFF+V3An7o/f5D4LlUnAWCQ/IxaxJ1TlVB52+3zAJ2hY4UhZxs0C7qUFCYE8+2qaez2N8znmdRaBd17kGh81u5d8S0sNRgKlN7FkKFjqnnghwCrtaj99wm8DuOxhN/qqqmPybJG0/T+dShVFWTOOia1YhDREjU/Tm6T4ahTzHKtaw8N3BoTJIzujVZauqqoFYOnlhTuWb+ccXsY2oQNQ6QAf+hQdTSB8gccfRBXmA3uR7cTneqvYZb66akLKk712hWSb00S41m++tMSV8e7ddORF96P/tqv1Jf86ExXUw0641ZmqgRCNLi3KaxjAkl7GPmLGrtfmqbMB6YUyZ/mZGxmJoWnHNdnnL2qfeBR058s3lVDW++1q5lqDBTzJioKE6nhJNLY/cZ+pXNVEZk5wWHPyn+YC6iRgDIQ+w+Q4lbdpCPmYuoEQDmx5FgRjGfZmeqMSV6P0I+aIkn8OfQ5wECSFhq3EICsIKKIlAHp6Ve2lIrJdQ3qI/Nv+I8jwLg9Kk5igvUzUOxi0fzUgFQWepFoAkl2TkPAPhQiXrJGAByfuSHdlqo2QpUKyVUFHGEF4giRtRDR0eFWgWpgrrUAZnrRWi9ohBukF8QMYFibKtg6UHV2suOoNBSEBzuhzs0HLcqBiJcs9RjVplkKzsAHKCiCNRx3wsAnd/4h6hjCoDkdO5HyNWo6pRMoAu4H0AdfqDol7qRkwVlYoz5B8+dChRSo9KMAAAAAElFTkSuQmCC" alt="SEC Logo" id="secLogo" width="100" />
+      <p id="text">
+        <span>SCORE: <span id="scoreEl" class="textEl">0</span></span>
+        <span>LVL: <span id="levelEl" class="textEl">1</span></span>
+      </p>
+      <p id="lives">
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEMAAAA5CAYAAABtc5bUAAAACXBIWXMAAAsSAAALEgHS3X78AAABaUlEQVRoge3aIU4DQRyF8VdSgURWIBAIJBJHewtkjwA32CNwBI6BY7lBJRKJ7A2GLFnx1M4Tf0pIvl+ybjKzfGWTyeyuWmsKbCW9JQMD7/N8PdGNhVbJsLPCBf89YhhiGGIYYhhiGGIYYphp0/Us6bYz7lzSa9Gal5Kug3Efkr4K1ttIugnGvai1NraMiq4hXG9btN42XG/gMTHEMMQwxDDEMMQwxDDEMH8RY5iP4XrXeOob4z/DEMMQwxDDEMMQwxDDEMNMx357SVedcenR2aOkQ+kdLtvP15L0yHJc/5z99aUvni9+4y9eMP2I98G4u2QyHhNDDEMMQwxDDEMMQwyzLp6v9852cgw3ZslHcJtgTCz92i+VTFb5tV86V4THxBDDEMMQwxDDEMMQwxDDVO9Ad8GYh3BD9RTsVI/hfUWqYyQvi9Md4+HUL595TAwxDDEMMQwxDDEMMUz1PiPxOZ9Q9ZRuqLokfQPW0hA3rrHpBAAAAABJRU5ErkJggg=="
+          alt="heart-outline"
+          class="hide heart-outline"
+          width="30"
+          height="30"
+        />
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEMAAAA5CAYAAABtc5bUAAAACXBIWXMAAAsSAAALEgHS3X78AAABaUlEQVRoge3aIU4DQRyF8VdSgURWIBAIJBJHewtkjwA32CNwBI6BY7lBJRKJ7A2GLFnx1M4Tf0pIvl+ybjKzfGWTyeyuWmsKbCW9JQMD7/N8PdGNhVbJsLPCBf89YhhiGGIYYhhiGGIYYphp0/Us6bYz7lzSa9Gal5Kug3Efkr4K1ttIugnGvai1NraMiq4hXG9btN42XG/gMTHEMMQwxDDEMMQwxDDEMH8RY5iP4XrXeOob4z/DEMMQwxDDEMMQwxDDEMNMx357SVedcenR2aOkQ+kdLtvP15L0yHJc/5z99aUvni9+4y9eMP2I98G4u2QyHhNDDEMMQwxDDEMMQwyzLp6v9852cgw3ZslHcJtgTCz92i+VTFb5tV86V4THxBDDEMMQwxDDEMMQwxDDVO9Ad8GYh3BD9RTsVI/hfUWqYyQvi9Md4+HUL595TAwxDDEMMQwxDDEMMUz1PiPxOZ9Q9ZRuqLokfQPW0hA3rrHpBAAAAABJRU5ErkJggg=="
+          alt="heart-outline"
+          class="hide heart-outline"
+          width="30"
+          height="30"
+        />
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEMAAAA5CAYAAABtc5bUAAAACXBIWXMAAAsSAAALEgHS3X78AAABaUlEQVRoge3aIU4DQRyF8VdSgURWIBAIJBJHewtkjwA32CNwBI6BY7lBJRKJ7A2GLFnx1M4Tf0pIvl+ybjKzfGWTyeyuWmsKbCW9JQMD7/N8PdGNhVbJsLPCBf89YhhiGGIYYhhiGGIYYphp0/Us6bYz7lzSa9Gal5Kug3Efkr4K1ttIugnGvai1NraMiq4hXG9btN42XG/gMTHEMMQwxDDEMMQwxDDEMH8RY5iP4XrXeOob4z/DEMMQwxDDEMMQwxDDEMNMx357SVedcenR2aOkQ+kdLtvP15L0yHJc/5z99aUvni9+4y9eMP2I98G4u2QyHhNDDEMMQwxDDEMMQwyzLp6v9852cgw3ZslHcJtgTCz92i+VTFb5tV86V4THxBDDEMMQwxDDEMMQwxDDVO9Ad8GYh3BD9RTsVI/hfUWqYyQvi9Md4+HUL595TAwxDDEMMQwxDDEMMUz1PiPxOZ9Q9ZRuqLokfQPW0hA3rrHpBAAAAABJRU5ErkJggg=="
+          alt="heart-outline"
+          class="hide heart-outline"
+          width="30"
+          height="30"
+        />
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEMAAAA5CAYAAABtc5bUAAAACXBIWXMAAAsSAAALEgHS3X78AAABaUlEQVRoge3aIU4DQRyF8VdSgURWIBAIJBJHewtkjwA32CNwBI6BY7lBJRKJ7A2GLFnx1M4Tf0pIvl+ybjKzfGWTyeyuWmsKbCW9JQMD7/N8PdGNhVbJsLPCBf89YhhiGGIYYhhiGGIYYphp0/Us6bYz7lzSa9Gal5Kug3Efkr4K1ttIugnGvai1NraMiq4hXG9btN42XG/gMTHEMMQwxDDEMMQwxDDEMH8RY5iP4XrXeOob4z/DEMMQwxDDEMMQwxDDEMNMx357SVedcenR2aOkQ+kdLtvP15L0yHJc/5z99aUvni9+4y9eMP2I98G4u2QyHhNDDEMMQwxDDEMMQwyzLp6v9852cgw3ZslHcJtgTCz92i+VTFb5tV86V4THxBDDEMMQwxDDEMMQwxDDVO9Ad8GYh3BD9RTsVI/hfUWqYyQvi9Md4+HUL595TAwxDDEMMQwxDDEMMUz1PiPxOZ9Q9ZRuqLokfQPW0hA3rrHpBAAAAABJRU5ErkJggg=="
+          alt="heart-outline"
+          class="hide heart-outline"
+          width="30"
+          height="30"
+        />
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEMAAAA5CAYAAABtc5bUAAAACXBIWXMAAAsSAAALEgHS3X78AAABaUlEQVRoge3aIU4DQRyF8VdSgURWIBAIJBJHewtkjwA32CNwBI6BY7lBJRKJ7A2GLFnx1M4Tf0pIvl+ybjKzfGWTyeyuWmsKbCW9JQMD7/N8PdGNhVbJsLPCBf89YhhiGGIYYhhiGGIYYphp0/Us6bYz7lzSa9Gal5Kug3Efkr4K1ttIugnGvai1NraMiq4hXG9btN42XG/gMTHEMMQwxDDEMMQwxDDEMH8RY5iP4XrXeOob4z/DEMMQwxDDEMMQwxDDEMNMx357SVedcenR2aOkQ+kdLtvP15L0yHJc/5z99aUvni9+4y9eMP2I98G4u2QyHhNDDEMMQwxDDEMMQwyzLp6v9852cgw3ZslHcJtgTCz92i+VTFb5tV86V4THxBDDEMMQwxDDEMMQwxDDVO9Ad8GYh3BD9RTsVI/hfUWqYyQvi9Md4+HUL595TAwxDDEMMQwxDDEMMUz1PiPxOZ9Q9ZRuqLokfQPW0hA3rrHpBAAAAABJRU5ErkJggg=="
+          alt="heart-outline"
+          class="hide heart-outline"
+          width="30"
+          height="30"
+        />
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEMAAAA6CAYAAADr5+R6AAAACXBIWXMAAAsSAAALEgHS3X78AAABL0lEQVRoge3awWnDMBhA4d+lA3QEL1ETn9pM0oyQDbpKMkmdk8FL1Ju4GEp5uVh/qUihfd81whIPBYStZlmWKJm7/hARbXFgztBO47A1cu76da5DpfnmdhpPmYH3yQeuC3v62ZqubMb4DP9aaa5LRKRi3FWa8E8wBhgDjAHGAGOAMcAY0Lw/7spH0P9h784AY4AxwBhgDDAGGAOMAcYAY4AxwBhgDDAGGAOMAcYAY0D2w/NQ+VvrLV3aaXzOzOfOAGOAMcAYYAwwBhgDjAHZC26n5KW0l2oryzmvZ8LCyNLvX1In0Iy569dT3luVh+XtS9cov8O/CRgDjAHGAGOAMcAYYAyodujKyr5CbKexuenC3BnXjAHGAGOAMcAYYAwwBmRf+9V0jIiHX5h3W0R8AIsSLxU5srF2AAAAAElFTkSuQmCC"
+          alt="heart"
+          class="heart"
+          width="30"
+          height="30"
+        />
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEMAAAA6CAYAAADr5+R6AAAACXBIWXMAAAsSAAALEgHS3X78AAABL0lEQVRoge3awWnDMBhA4d+lA3QEL1ETn9pM0oyQDbpKMkmdk8FL1Ju4GEp5uVh/qUihfd81whIPBYStZlmWKJm7/hARbXFgztBO47A1cu76da5DpfnmdhpPmYH3yQeuC3v62ZqubMb4DP9aaa5LRKRi3FWa8E8wBhgDjAHGAGOAMcAY0Lw/7spH0P9h784AY4AxwBhgDDAGGAOMAcYAY4AxwBhgDDAGGAOMAcYAY0D2w/NQ+VvrLV3aaXzOzOfOAGOAMcAYYAwwBhgDjAHZC26n5KW0l2oryzmvZ8LCyNLvX1In0Iy569dT3luVh+XtS9cov8O/CRgDjAHGAGOAMcAYYAyodujKyr5CbKexuenC3BnXjAHGAGOAMcAYYAwwBmRf+9V0jIiHX5h3W0R8AIsSLxU5srF2AAAAAElFTkSuQmCC"
+          alt="heart"
+          class="heart"
+          width="30"
+          height="30"
+        />
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEMAAAA6CAYAAADr5+R6AAAACXBIWXMAAAsSAAALEgHS3X78AAABL0lEQVRoge3awWnDMBhA4d+lA3QEL1ETn9pM0oyQDbpKMkmdk8FL1Ju4GEp5uVh/qUihfd81whIPBYStZlmWKJm7/hARbXFgztBO47A1cu76da5DpfnmdhpPmYH3yQeuC3v62ZqubMb4DP9aaa5LRKRi3FWa8E8wBhgDjAHGAGOAMcAY0Lw/7spH0P9h784AY4AxwBhgDDAGGAOMAcYAY4AxwBhgDDAGGAOMAcYAY0D2w/NQ+VvrLV3aaXzOzOfOAGOAMcAYYAwwBhgDjAHZC26n5KW0l2oryzmvZ8LCyNLvX1In0Iy569dT3luVh+XtS9cov8O/CRgDjAHGAGOAMcAYYAyodujKyr5CbKexuenC3BnXjAHGAGOAMcAYYAwwBmRf+9V0jIiHX5h3W0R8AIsSLxU5srF2AAAAAElFTkSuQmCC"
+          alt="heart"
+          class="heart"
+          width="30"
+          height="30"
+        />
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEMAAAA6CAYAAADr5+R6AAAACXBIWXMAAAsSAAALEgHS3X78AAABL0lEQVRoge3awWnDMBhA4d+lA3QEL1ETn9pM0oyQDbpKMkmdk8FL1Ju4GEp5uVh/qUihfd81whIPBYStZlmWKJm7/hARbXFgztBO47A1cu76da5DpfnmdhpPmYH3yQeuC3v62ZqubMb4DP9aaa5LRKRi3FWa8E8wBhgDjAHGAGOAMcAY0Lw/7spH0P9h784AY4AxwBhgDDAGGAOMAcYAY4AxwBhgDDAGGAOMAcYAY0D2w/NQ+VvrLV3aaXzOzOfOAGOAMcAYYAwwBhgDjAHZC26n5KW0l2oryzmvZ8LCyNLvX1In0Iy569dT3luVh+XtS9cov8O/CRgDjAHGAGOAMcAYYAyodujKyr5CbKexuenC3BnXjAHGAGOAMcAYYAwwBmRf+9V0jIiHX5h3W0R8AIsSLxU5srF2AAAAAElFTkSuQmCC"
+          alt="heart"
+          class="heart"
+          width="30"
+          height="30"
+        />
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEMAAAA6CAYAAADr5+R6AAAACXBIWXMAAAsSAAALEgHS3X78AAABL0lEQVRoge3awWnDMBhA4d+lA3QEL1ETn9pM0oyQDbpKMkmdk8FL1Ju4GEp5uVh/qUihfd81whIPBYStZlmWKJm7/hARbXFgztBO47A1cu76da5DpfnmdhpPmYH3yQeuC3v62ZqubMb4DP9aaa5LRKRi3FWa8E8wBhgDjAHGAGOAMcAY0Lw/7spH0P9h784AY4AxwBhgDDAGGAOMAcYAY4AxwBhgDDAGGAOMAcYAY0D2w/NQ+VvrLV3aaXzOzOfOAGOAMcAYYAwwBhgDjAHZC26n5KW0l2oryzmvZ8LCyNLvX1In0Iy569dT3luVh+XtS9cov8O/CRgDjAHGAGOAMcAYYAyodujKyr5CbKexuenC3BnXjAHGAGOAMcAYYAwwBmRf+9V0jIiHX5h3W0R8AIsSLxU5srF2AAAAAElFTkSuQmCC"
+          alt="heart"
+          class="heart"
+          width="30"
+          height="30"
+        />
+      </p>
+      <canvas></canvas>
+    </div>
+    <!-- <div id="fill-form">
+      <h1>Submit Score</h1>
+      <form id="score-form">
+        <label for="name">Name: </label>
+        <input type="text" name="name" required />
+        <label for="company">Company: </label>
+        <input type="text" name="company" required />
+        <label for="position">Position: </label>
+        <input type="text" name="position" required />
+        <label for="email">Email: </label>
+        <input type="email" name="email" required />
+        <label for="number">Phone number:</label>
+        <input type="number" name="number" required />
+        <button id="submit-btn">Submit</button>
+      </form>
+    </div>
+    <div id="scoreboard">
+      <h1>Scoreboard</h1>
+      <ol id="leaderboard-list"></ol>
+    </div> -->
+    <div id="game-instructions">
+      <h1>Instructions</h1>
+      <div id="instruction">
+        <p>Up: &uarr;</p>
+        <p>Down: &darr;</p>
+        <p>Left: &larr;</p>
+        <p>Right: &rarr;</p>
+        <p>P: Prizes(Intro) / Pause(During Gameplay)</p>
+        <p>B: Back</p>
+      </div>
+    </div>
+    
+  </body>
+</html>
