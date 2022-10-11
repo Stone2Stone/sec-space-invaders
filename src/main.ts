@@ -1,4 +1,4 @@
-import './style.css';
+import '../style.css';
 
 // import gameBg from '../img/game-bg.png';
 import animateEnd from './AnimateEnd';

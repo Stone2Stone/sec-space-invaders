@@ -2,5 +2,5 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   // ...
-  base: "sec-space-invaders",
+  base: "/sec-space-invaders/",
 });
