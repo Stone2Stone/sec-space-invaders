@@ -1,6 +1,6 @@
 import './style.css';
 
-import gameBg from '../img/game-bg.png';
+// import gameBg from '../img/game-bg.png';
 import animateEnd from './AnimateEnd';
 import animateIntro from './AnimateIntro';
 import animatePrize from './AnimatePrize';
@@ -8,13 +8,13 @@ import BadLicence from './BadLicence';
 import Block from './Block';
 import { canvas, canvasContext } from './Canvas';
 import createParticle from './CreateParticle';
-import { formEl, leaderboardEl, levelEl, scoreEl, textEl } from './Elements';
+import { formEl, levelEl, scoreEl, textEl } from './Elements';
 import GoodLicence from './GoodLicence';
 import Grid from './Grid';
 import { heartElements, heartOutlineElements } from './HeartEl';
-import ILeaderboard from './interface/ILeaderboard';
+// import ILeaderboard from './interface/ILeaderboard';
 import InvaderProjectile from './InvaderProjectile';
-import fetchLeaderboardData from './Leaderboard';
+// import fetchLeaderboardData from './Leaderboard';
 import livesEl from './LivesEl';
 import Particle from './Particle';
 import Player from './Player';
@@ -71,13 +71,13 @@ let level: number = 1;
 function animateGame() {
   if (!game.active) return;
   requestAnimationFrame(animateGame);
-  setTimeout(() => {
-    let background = new Image();
-    background.src = gameBg;
-    canvasContext.drawImage(background, 0, 0, canvas.width, canvas.height);
-  }, 0);
-  // canvasContext.fillStyle = "#150D1F";
-  // canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+  // setTimeout(() => {
+  //   let background = new Image();
+  //   background.src = gameBg;
+  //   canvasContext.drawImage(background, 0, 0, canvas.width, canvas.height);
+  // }, 0);
+  canvasContext.fillStyle = "#150D1F";
+  canvasContext.fillRect(0, 0, canvas.width, canvas.height);
   player.update();
 
   particles.forEach((particle, index) => {
@@ -491,14 +491,14 @@ function gameOver() {
 addEventListener("keydown", gameIntro);
 
 if (!game.over) {
-  const leaderboardData: ILeaderboard[] = await fetchLeaderboardData<
-    ILeaderboard[]
-  >();
-  leaderboardData.forEach(({ name, score }) => {
-    leaderboardEl.innerHTML = `${leaderboardEl.innerHTML}<li>${name}<span class="score">${score}</span></li>`;
-    console.log("Name: ", name);
-    console.log("Score: ", score);
-  });
+  // const leaderboardData: ILeaderboard[] = await fetchLeaderboardData<
+  //   ILeaderboard[]
+  // >();
+  // leaderboardData.forEach(({ name, score }) => {
+  //   leaderboardEl.innerHTML = `${leaderboardEl.innerHTML}<li>${name}<span class="score">${score}</span></li>`;
+  //   console.log("Name: ", name);
+  //   console.log("Score: ", score);
+  // });
   animateIntro();
 }
 
