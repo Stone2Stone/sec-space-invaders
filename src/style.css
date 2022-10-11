@@ -21,6 +21,7 @@ body {
   margin: 0;
   font-family: "Pixeloid Sans";
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: blueviolet;
@@ -74,11 +75,44 @@ body::-webkit-scrollbar {
   color: #109bd8;
 }
 
-#gameOver {
-  position: absolute;
-  top: 30%;
-  left: 30%;
-  color: white;
-  font-size: 64px;
-  z-index: 100;
+#scoreboard {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+#leaderboard-list {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  gap: 10px 0;
+}
+
+#leaderboard-list > li {
+  width: 100%;
+}
+
+#leaderboard-list .score {
+  float: right;
+}
+
+#fill-form {
+  width: 100%;
+}
+
+#score-form {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  gap: 10px;
+}
+
+input {
+  font-family: inherit;
+}
+
+#submit-btn {
+  width: fit-content;
+  font-family: inherit;
+  font-weight: bolder;
 }

@@ -7,41 +7,50 @@ class Grid {
   velocity: { x: number; y: number };
   invaders: GoodLicence[] | BadLicence[];
   width: number;
-  constructor(licence: string, row: number, column: number) {
+  descend?: boolean | number;
+  constructor(
+    toggleArray: Array<Array<number>>,
+    velocityXSpeed?: number,
+    descend?: boolean | number
+  ) {
+    this.descend = descend;
+
     this.position = {
       x: 0,
       y: 0,
     };
 
     this.velocity = {
-      x: 0,
-      y: 0.5,
+      x: velocityXSpeed ? velocityXSpeed : 0,
+      y: typeof this.descend === "number" ? this.descend : 0,
     };
 
     this.invaders = [];
-    const columns: number = column; // Math.floor(Math.random() * 10 + 5);
-    const rows: number = row; // Math.floor(Math.random() * 5 + 2);
 
-    this.width = columns * 30;
+    const columns: number = toggleArray[0].length;
+    const rows: number = toggleArray.length;
+    this.width = columns * 60;
+    let flattendedArray = toggleArray.flat();
 
     for (let x = 0; x < columns; x++) {
       for (let y = 0; y < rows; y++) {
-        switch (licence) {
-          case "good":
+        let firstEl = flattendedArray.shift();
+        switch (firstEl) {
+          case 1:
             this.invaders.push(
               new GoodLicence({
                 position: {
-                  x: canvas.width / 1.6 - x * 60,
+                  x: x * 60, // canvas.width / 1.6 - x * 60,
                   y: y * 60,
                 },
               })
             );
             break;
-          case "bad":
+          case 2:
             this.invaders.push(
               new BadLicence({
                 position: {
-                  x: canvas.width / 1.6 - x * 60,
+                  x: x * 60, // canvas.width / 1.6 - x * 60,
                   y: y * 60,
                 },
               })
@@ -53,13 +62,15 @@ class Grid {
   }
 
   update(): void {
-    // this.position.x += this.velocity.x;
-    // this.position.y += this.velocity.y;
-    // this.velocity.y = 0;
-    // if (this.position.x + this.width >= canvas.width || this.position.x <= 0) {
-    // this.velocity.x = -this.velocity.x;
-    // this.velocity.y = 30;
-    // }
+    if (!(typeof this.descend === "boolean")) return;
+    this.position.x += this.velocity.x;
+    this.position.y += this.velocity.y;
+    this.velocity.y = 0;
+    if (this.position.x + this.width >= canvas.width || this.position.x <= 0) {
+      this.velocity.x = -this.velocity.x;
+
+      this.velocity.y = this.descend ? 10 : 0;
+    }
   }
 }
 

@@ -85,8 +85,28 @@
           height="30"
         />
       </p>
-      <canvas> </canvas>
+      <canvas></canvas>
     </div>
-    <script type="module" src="/src/main.ts"></script>
+    <div id="fill-form">
+      <h1>Submit Score</h1>
+      <form id="score-form">
+        <label for="name">Name: </label>
+        <input type="text" name="name" required />
+        <label for="company">Company: </label>
+        <input type="text" name="company" required />
+        <label for="position">Position: </label>
+        <input type="text" name="position" required />
+        <label for="email">Email: </label>
+        <input type="email" name="email" required />
+        <label for="number">Phone number:</label>
+        <input type="number" name="number" required />
+        <button id="submit-btn">Submit</button>
+      </form>
+    </div>
+    <div id="scoreboard">
+      <h1>Scoreboard</h1>
+      <ol id="leaderboard-list"></ol>
+    </div>
+    <script async type="module" src="/src/main.ts"></script>
   </body>
 </html>

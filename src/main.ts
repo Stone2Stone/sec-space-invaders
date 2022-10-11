@@ -1,15 +1,21 @@
 import './style.css';
 
-import animateLose from './AnimateLose';
-import animateWin from './AnimateWin';
+import gameBg from '../img/game-bg.png';
+import animateEnd from './AnimateEnd';
+import animateIntro from './AnimateIntro';
+import animatePrize from './AnimatePrize';
 import BadLicence from './BadLicence';
+import Block from './Block';
 import { canvas, canvasContext } from './Canvas';
 import createParticle from './CreateParticle';
-import { levelEl, scoreEl } from './Elements';
+import { formEl, leaderboardEl, levelEl, scoreEl, textEl } from './Elements';
 import GoodLicence from './GoodLicence';
 import Grid from './Grid';
 import { heartElements, heartOutlineElements } from './HeartEl';
+import ILeaderboard from './interface/ILeaderboard';
 import InvaderProjectile from './InvaderProjectile';
+import fetchLeaderboardData from './Leaderboard';
+import livesEl from './LivesEl';
 import Particle from './Particle';
 import Player from './Player';
 import PlayerProjectile from './PlayerProjectile';
@@ -18,6 +24,8 @@ const SPEED: number = 5;
 
 //instantiate Player
 const player = new Player(canvas);
+
+const blocks: Block[] = [];
 
 //create player projectiles
 const playerProjectiles: PlayerProjectile[] = [];
@@ -61,10 +69,17 @@ let lives: number = 5;
 let level: number = 1;
 
 function animateGame() {
-  if (game.active) requestAnimationFrame(animateGame);
-  canvasContext.fillStyle = "#150D1F";
-  canvasContext.fillRect(0, 0, canvas.width, canvas.height);
+  if (!game.active) return;
+  requestAnimationFrame(animateGame);
+  setTimeout(() => {
+    let background = new Image();
+    background.src = gameBg;
+    canvasContext.drawImage(background, 0, 0, canvas.width, canvas.height);
+  }, 0);
+  // canvasContext.fillStyle = "#150D1F";
+  // canvasContext.fillRect(0, 0, canvas.width, canvas.height);
   player.update();
+
   particles.forEach((particle, index) => {
     if (particle.opacity <= 0) {
       setTimeout(() => {
@@ -93,7 +108,7 @@ function animateGame() {
     ) {
       if (lives <= 0) {
         game.over = false;
-        return requestAnimationFrame(animateLose);
+        return gameOver();
       } else {
         lives--;
 
@@ -128,11 +143,14 @@ function animateGame() {
             checkRespawnCount();
           }
         }, 0);
-        createParticle({
-          particles: particles,
-          object: player,
-          color: "white",
-        });
+        createParticle(
+          {
+            particles: particles,
+            object: player,
+            color: "white",
+          },
+          "0"
+        );
       }
     }
   });
@@ -149,7 +167,7 @@ function animateGame() {
   grids.forEach((grid, gridIndex) => {
     grid.update();
 
-    //spawn projectile
+    // spawn projectile
     if (frames % 100 === 0 && grid.invaders.length > 0) {
       const licence =
         grid.invaders[Math.floor(Math.random() * grid.invaders.length)];
@@ -166,7 +184,7 @@ function animateGame() {
         invader.posititon.x <= player.posititon.x + player.width
       ) {
         game.over = false;
-        return requestAnimationFrame(animateLose);
+        return gameOver();
       }
       playerProjectiles.forEach((playerProjectile, j) => {
         if (
@@ -191,16 +209,34 @@ function animateGame() {
               });
 
             if (invaderFound && projectileFound) {
-              score += 100;
+              if (invaderFound instanceof BadLicence) {
+                score += 100;
+                createParticle(
+                  {
+                    particles: particles,
+                    object: invader,
+                    color: "green",
+                  },
+                  "+100"
+                );
+              } else if (invaderFound instanceof GoodLicence) {
+                score -= 100;
+                createParticle(
+                  {
+                    particles: particles,
+                    object: invader,
+                    color: "red",
+                  },
+                  "-100"
+                );
+              }
               scoreEl.innerHTML = `${score}`;
-              createParticle({
-                particles: particles,
-                object: invader,
-              });
               grid.invaders.splice(i, 1);
               playerProjectiles.splice(j, 1);
 
-              if (grid.invaders.length > 0) {
+              if (
+                grid.invaders.some((invader) => invader instanceof BadLicence)
+              ) {
                 const firstInvader: BadLicence | GoodLicence = grid.invaders[0];
                 const lastInvader: BadLicence | GoodLicence =
                   grid.invaders[grid.invaders.length - 1];
@@ -215,21 +251,76 @@ function animateGame() {
                 playerProjectiles.splice(0, playerProjectiles.length);
                 invaderProjectiles.splice(0, invaderProjectiles.length);
                 particles.splice(0, particles.length);
+                blocks.splice(0, blocks.length);
                 setTimeout(() => {
                   level = level + 1;
                   levelEl.innerHTML = `${level}`;
                   switch (level) {
                     case 2:
-                      grids.push(new Grid("bad", 5, 5));
+                      blocks.push(
+                        new Block(10),
+                        new Block(300),
+                        new Block(600),
+                        new Block(canvas.width - 143)
+                      );
+                      grids.push(
+                        new Grid(
+                          [
+                            [2, 1, 2, 1, 1, 2, 1, 2, 2, 1, 2, 1, 1],
+                            [2, 1, 2, 2, 1, 2, 1, 1, 2, 1, 2, 2, 1],
+                            [2, 1, 1, 2, 1, 2, 2, 1, 2, 1, 1, 2, 1],
+                            [2, 2, 1, 2, 1, 1, 2, 1, 2, 2, 1, 2, 1],
+                          ],
+                          2,
+                          true
+                        )
+                      );
+
                       return;
                     case 3:
-                      grids.push(new Grid("bad", 6, 6));
+                      blocks.push(
+                        new Block(10),
+                        new Block(300),
+                        new Block(600),
+                        new Block(canvas.width - 143)
+                      );
+
+                      grids.push(
+                        new Grid(
+                          [
+                            [2, 0, 1, 0, 0, 2, 0, 1, 2, 0, 1, 0, 0],
+                            [2, 0, 1, 2, 0, 1, 0, 0, 2, 0, 1, 2, 0],
+                            [1, 0, 0, 2, 0, 1, 2, 0, 1, 0, 0, 2, 0],
+                            [1, 2, 0, 1, 0, 0, 2, 0, 1, 2, 0, 1, 0],
+                          ],
+                          2,
+                          true
+                        )
+                      );
                       return;
                     case 4:
-                      grids.push(new Grid("bad", 7, 7));
+                      blocks.push(
+                        new Block(10),
+                        new Block(300),
+                        new Block(600),
+                        new Block(canvas.width - 143)
+                      );
+                      grids.push(
+                        new Grid(
+                          [
+                            [0, 1, 1, 1, 0, 1, 2, 2, 2, 1, 1, 2, 2],
+                            [2, 1, 1, 2, 2, 2, 1, 1, 2, 2, 2, 1, 1],
+                            [2, 2, 2, 1, 1, 2, 2, 2, 1, 1, 2, 2, 2],
+                            [1, 1, 2, 2, 2, 1, 1, 2, 2, 2, 1, 1, 2],
+                            [2, 2, 1, 1, 2, 2, 2, 1, 0, 1, 1, 1, 0],
+                          ],
+                          1,
+                          true
+                        )
+                      );
                       return;
                     default:
-                      animateWin();
+                      animateEnd(score, true);
                       return;
                   }
                 }, 1000);
@@ -237,13 +328,50 @@ function animateGame() {
             }
           }, 0);
         }
+
+        level > 1 &&
+          blocks.forEach((block) => {
+            if (
+              playerProjectile.position.y - playerProjectile.radius <=
+                block.posititon.y + block.height &&
+              playerProjectile.position.x + playerProjectile.radius >=
+                block.posititon.x &&
+              playerProjectile.position.x - playerProjectile.radius <=
+                block.posititon.x + block.width &&
+              playerProjectile.position.y + playerProjectile.radius >=
+                block.posititon.y
+            ) {
+              playerProjectiles.splice(j, 1);
+            }
+          });
       });
     });
   });
 
+  if (level > 1) {
+    blocks.forEach((block) => {
+      block.update();
+    });
+  }
+
   //spawn new enemies
   if (frames === 0) {
-    grids.push(new Grid("good", 5, 5));
+    grids.push(
+      new Grid(
+        [
+          [2, 0, 1, 0, 0, 2, 0, 1, 2, 0, 1, 0, 0],
+          [2, 0, 1, 2, 0, 1, 0, 0, 2, 0, 1, 2, 0],
+          [1, 0, 0, 2, 0, 1, 2, 0, 1, 0, 0, 2, 0],
+          [1, 2, 0, 1, 0, 0, 2, 0, 1, 2, 0, 1, 0],
+        ],
+        2,
+        true
+      )
+    );
+    // for (let i = 0; i < 3; i++) {
+    //   new Block(canvas, { x: i, y: canvas.width / 2 }).draw();
+    // }
+    // new Block(canvas, { x: canvas.width / 2, y: canvas.height / 2 }).draw();
   }
 
   frames++;
@@ -262,61 +390,132 @@ function animateGame() {
   return (player.velocity.x = 0);
 }
 
-if (!game.over) {
-  animateGame();
-  console.log(grids);
-} else {
-  animateLose();
+function gameActiveUp(e: KeyboardEvent) {
+  if (!game.over) {
+    switch (e.key) {
+      case "a":
+        keys.a.pressed = false;
+        return;
+      case "d":
+        keys.d.pressed = false;
+        return;
+      case "ArrowLeft":
+        keys.ArrowLeft.pressed = false;
+        return;
+      case "ArrowRight":
+        keys.ArrowRight.pressed = false;
+        return;
+    }
+  }
 }
 
-addEventListener("keydown", ({ key }) => {
-  switch (key) {
-    case "a":
-      keys.a.pressed = true;
-      break;
-    case "d":
-      keys.d.pressed = true;
-      break;
-    case "ArrowLeft":
-      keys.ArrowLeft.pressed = true;
-      break;
-    case "ArrowRight":
-      keys.ArrowRight.pressed = true;
-      break;
-    case " ":
-      playerProjectiles.push(
-        new PlayerProjectile(
-          {
-            position: {
-              x: player.posititon.x + player.width / 2,
-              y: player.posititon.y,
+function gameActiveDown(e: KeyboardEvent) {
+  if (!game.over) {
+    switch (e.key) {
+      case "a":
+        keys.a.pressed = true;
+        return;
+      case "d":
+        keys.d.pressed = true;
+        return;
+      case "ArrowLeft":
+        keys.ArrowLeft.pressed = true;
+        return;
+      case "ArrowRight":
+        keys.ArrowRight.pressed = true;
+        return;
+      case " ":
+        e.preventDefault();
+        playerProjectiles.push(
+          new PlayerProjectile(
+            {
+              position: {
+                x: player.posititon.x + player.width / 2,
+                y: player.posititon.y,
+              },
+              velocity: { x: 0, y: -10 },
             },
-            velocity: { x: 0, y: -10 },
-          },
-          canvas
-        )
-      );
-      keys.shoot.pressed = true;
+            canvas
+          )
+        );
+        keys.shoot.pressed = true;
+        return;
+      case "p":
+        if (!game.over) {
+          game.active = !game.active;
+          animateGame();
+        }
+    }
+  }
+}
+
+function gamePrize(e: KeyboardEvent) {
+  if (!game.over) {
+    switch (e.key) {
+      case "b":
+        animateIntro();
+        addEventListener("keydown", gameIntro);
+        break;
+    }
+  }
+}
+
+function gameIntro(e: KeyboardEvent) {
+  switch (e.key) {
+    case "Enter":
+      animateGame();
+      textEl.classList.contains("hide") && textEl.classList.remove("hide");
+      livesEl.classList.contains("hide") && livesEl.classList.remove("hide");
+      removeEventListener("keydown", gameIntro);
+      removeEventListener("keydown", gamePrize);
+      addEventListener("keyup", gameActiveUp);
+      addEventListener("keydown", gameActiveDown);
       break;
     case "p":
-      game.active = !game.active;
-      animateGame();
+      animatePrize();
+      removeEventListener("keydown", gameIntro);
+      addEventListener("keydown", gamePrize);
+      break;
   }
-});
+}
 
-addEventListener("keyup", ({ key }) => {
-  switch (key) {
-    case "a":
-      keys.a.pressed = false;
-      break;
-    case "d":
-      keys.d.pressed = false;
-      break;
-    case "ArrowLeft":
-      keys.ArrowLeft.pressed = false;
-      break;
-    case "ArrowRight":
-      keys.ArrowRight.pressed = false;
-      break;
-  }
+function gameOver() {
+  playerProjectiles.splice(0, playerProjectiles.length);
+  invaderProjectiles.splice(0, invaderProjectiles.length);
+  removeEventListener("keyup", gameActiveUp);
+  removeEventListener("keydown", gameActiveDown);
+  canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+  animateEnd(score, false);
+}
+
+addEventListener("keydown", gameIntro);
+
+if (!game.over) {
+  const leaderboardData: ILeaderboard[] = await fetchLeaderboardData<
+    ILeaderboard[]
+  >();
+  leaderboardData.forEach(({ name, score }) => {
+    leaderboardEl.innerHTML = `${leaderboardEl.innerHTML}<li>${name}<span class="score">${score}</span></li>`;
+    console.log("Name: ", name);
+    console.log("Score: ", score);
+  });
+  animateIntro();
+}
+
+formEl.addEventListener("submit", (e: SubmitEvent) => {
+  e.preventDefault();
+  let newObject = {};
+  Object.values(formEl).reduce((obj, field) => {
+    obj[field.name] = field.value;
+    // console.log(obj);
+    newObject = obj;
+    return obj;
+  }, {});
+
+  newObject = Object.fromEntries(
+    Object.entries(newObject).filter(([_, v]) => v != null)
+  );
+
+  newObject = { ...newObject, score: score };
+  console.log(newObject);
 });
